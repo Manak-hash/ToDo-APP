@@ -6,9 +6,6 @@
 *.html text
 *.js text
 *.json text
-*.ts text
-*.py text
-*.java text
 
 # Documents
 *.md text

@@ -65,6 +65,9 @@ function creatTodoItem(todo, todoIndex) {
     paragraph.addEventListener('touchend', function(e) {
         clearTimeout(pressTimer);
     });
+    paragraph.addEventListener('touchmove', function(e) {
+        clearTimeout(pressTimer);
+    });
     paragraph.addEventListener('dblclick', function(e) {
         const currentIndex = parseInt(this.getAttribute('data-index'));
         AllTodos.splice(currentIndex, 1);
@@ -146,4 +149,23 @@ updateTodos();
 
     // Run validation on page load
     validateAndCleanData();
+
+    // Improve long press detection for deleting tasks
+    document.querySelectorAll('.todo-item').forEach(item => {
+        let pressTimer;
+        let longPressDuration = 500;
+
+        item.addEventListener('touchstart', function(e) {
+            pressTimer = setTimeout(() => {
+                const currentIndex = parseInt(this.getAttribute('data-index'));
+                AllTodos.splice(currentIndex, 1);
+                saveTodos();
+                updateTodos();
+            }, longPressDuration);
+        });
+
+        item.addEventListener('touchend', function(e) {
+            clearTimeout(pressTimer);
+        });
+    });
 })();
