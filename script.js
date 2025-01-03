@@ -107,12 +107,14 @@ form.addEventListener('submit', function(e) {
 });
 
 updateTodos();
+
 // Mobile optimization code
 (function initMobileOptimizations() {
-    // Prevent double submissions on mobile
-    form.addEventListener('touchend', (e) => {
-        e.preventDefault();
-    });
+    // Remove the touchend event listener that prevents form submission
+    // This was causing issues with form submission on mobile devices
+    // form.addEventListener('touchend', (e) => {
+    //     e.preventDefault();
+    // });
 
     // Data validation and cleanup on page load
     function validateAndCleanData() {
@@ -165,6 +167,10 @@ updateTodos();
         });
 
         item.addEventListener('touchend', function(e) {
+            clearTimeout(pressTimer);
+        });
+
+        item.addEventListener('touchmove', function(e) {
             clearTimeout(pressTimer);
         });
     });
