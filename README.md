@@ -34,13 +34,14 @@ You can access the ToDo App directly by visiting the following link: [ToDo App](
 - **SortableJS:** Drag and drop functionality.
 
 ## File Structure
+```
 |-- IMG/
 |   |-- .ico 
 |-- **[index.html](index.html):** The main HTML file.
 |-- **[style.css](style.css):** The stylesheet for the application.
 |-- **[script.js](script.js):** The main JavaScript file for task management.
 |-- **[help-card.js](help-card.js):** JavaScript file for handling the help card functionality.
-
+```
 ## Contributing
 Contributions are welcome! Please fork the repository and create a pull request with your changes.
 
