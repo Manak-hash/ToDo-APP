@@ -1,4 +1,4 @@
-# ToDo App
+# <img src="IMG/favicon.ico" alt="Favicon" width="16" height="16">ToDo App
 
 ## Overview
 The ToDo App is a simple and intuitive task management application that allows users to add, complete, and delete tasks. It features a clean and modern design with smooth animations and a responsive layout.
