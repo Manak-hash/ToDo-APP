@@ -104,3 +104,46 @@ form.addEventListener('submit', function(e) {
 });
 
 updateTodos();
+// Mobile optimization code
+(function initMobileOptimizations() {
+    // Prevent double submissions on mobile
+    form.addEventListener('touchend', (e) => {
+        e.preventDefault();
+    });
+
+    // Data validation and cleanup on page load
+    function validateAndCleanData() {
+        try {
+            const savedTodos = localStorage.getItem('todos');
+            if (!savedTodos) {
+                localStorage.setItem('todos', JSON.stringify([]));
+                return;
+            }
+
+            const todos = JSON.parse(savedTodos);
+            if (!Array.isArray(todos)) {
+                localStorage.setItem('todos', JSON.stringify([]));
+                return;
+            }
+
+            // Clean and re-save to ensure data integrity
+            const cleanTodos = todos.filter(todo => 
+                todo && 
+                typeof todo === 'object' && 
+                'text' in todo && 
+                'completed' in todo
+            );
+            
+            localStorage.setItem('todos', JSON.stringify(cleanTodos));
+            AllTodos = cleanTodos;
+            updateTodos();
+        } catch {
+            localStorage.setItem('todos', JSON.stringify([]));
+            AllTodos = [];
+            updateTodos();
+        }
+    }
+
+    // Run validation on page load
+    validateAndCleanData();
+})();

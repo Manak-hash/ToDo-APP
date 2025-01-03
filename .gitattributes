@@ -1,2 +1,28 @@
 # Auto detect text files and perform LF normalization
-* text=auto
+* text=auto eol=lf
+
+# Source code
+*.css text
+*.html text
+*.js text
+*.json text
+*.ts text
+*.py text
+*.java text
+
+# Documents
+*.md text
+*.txt text
+*.pdf binary
+
+# Graphics
+*.png binary
+*.jpg binary
+*.gif binary
+*.ico binary
+*.svg text
+
+# Archives
+*.zip binary
+*.7z binary
+*.gz binary
