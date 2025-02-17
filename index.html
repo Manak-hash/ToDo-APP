@@ -5,29 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/x-icon" href="IMG/favicon.ico">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <title>To Do List</title>
 </head>
 <body>
     <h1>ToDo APP</h1>
     <button id="help-button" aria-label="Help">?</button>
     <div id="help-card" class="help-card">
-        <h2>How to Use the ToDo APP</h2>
-        <ul>
-            <li><strong>Add a Task:</strong> Type your task in the input field and click "Add".</li>
-            <li><strong>Mark as Completed:</strong> Click on a task to mark it as completed.</li>
-            <li><strong>Delete a Task:</strong> Double-click or long press on mobile to delete a task.</li>
-        </ul>
+        <h2>🚀 How to Use</h2>
+        <ol>
+            <li>📝 Add tasks by typing in the input field and clicking "Add Task" or pressing Enter</li>
+            <li>✅ Mark tasks as complete using the checkbox</li>
+            <li>🗑️ Delete individual tasks using the Delete button</li>
+            <li>🔀 Drag and drop tasks to reorder them</li>
+            <li>🧹 Clear all tasks with the "Clear All" button</li>
+        </ol>
         <button id="close-help">Close</button>
     </div>
     <div class="container">
-        <form>
-            <input type="text" id="input" placeholder="Add a Task..." autocomplete="off">
-            <button id="add" type="submit">Add</button>
-        </form>
-        <div class="todos" id="todos"></div>
+        <div class="input-section">
+            <input type="text" id="input" placeholder="Add a Task..." aria-label="Task input" autocomplete="off">
+            <button id="add" type="submit" aria-label="Add new Task">Add Task</button>
+        </div>
+        <div class="stats" id="stats">
+            🌟 <span id="totalTasks">0</span> Total | ✅ <span id="completedTasks">0</span> Completed
+        </div>
+        <ul class="todos" id="todos"></ul>
     </div>
-    <script src="script.js" defer></script>
+<button id="clearAll">Clear All</button>
+    <script src="new-script.js" defer></script>
     <script src="help-card.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
 </body>
 </html>

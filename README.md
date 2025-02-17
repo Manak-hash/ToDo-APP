@@ -5,9 +5,10 @@ The ToDo App is a simple and intuitive task management application that allows u
 
 ## Features
 - **Add Tasks:** Easily add new tasks by typing in the input field and clicking the "Add" button.
-- **Mark as Completed:** Click on a task to mark it as completed.
-- **Delete Tasks:** Double-click or long-press on a task to delete it.
+- **Mark as Completed:** Click on the checkbox next to a task to mark it as completed.
+- **Delete Tasks:** Click the trash button next to a task to delete it.
 - **Drag and Drop:** Reorder tasks by dragging and dropping them.
+- **Clear All Tasks:** Click the "Clear All" button to remove all tasks.
 - **Persistent Storage:** Tasks are saved in the browser's local storage, so they persist even after the page is refreshed.
 
 ## How to Use
@@ -16,13 +17,16 @@ The ToDo App is a simple and intuitive task management application that allows u
 2. Click the "Add" button or press Enter.
 
 ### Mark as Completed:
-- Click on a task to mark it as completed.
+- Click on the checkbox next to a task to mark it as completed.
 
 ### Delete a Task:
-- Double-click or long-press on a task to delete it.
+- Click the trash button next to a task to delete it.
 
 ### Reorder Tasks:
 - Drag and drop tasks to reorder them.
+
+### Clear All Tasks:
+- Click the "Clear All" button to remove all tasks.
 
 ## Access the App
 You can access the ToDo App directly by visiting the following link: [ToDo App](https://manak-hash.github.io/ToDo-APP/)
@@ -31,7 +35,6 @@ You can access the ToDo App directly by visiting the following link: [ToDo App](
 - **HTML5:** Structure of the application.
 - **CSS3:** Styling and animations.
 - **JavaScript:** Functionality and interactivity.
-- **SortableJS:** Drag and drop functionality.
 
 ## File Structure 
 - **[index.html](index.html):** The main HTML file.
@@ -44,6 +47,7 @@ Contributions are welcome! Please fork the repository and create a pull request 
 
 ## Acknowledgments
 - **SortableJS:** For providing the drag and drop functionality.
+- **Font Awesome:** For providing the icons used in the application.
 - **Google Fonts:** For the font used in the application.
 
 ## Future Enhancements

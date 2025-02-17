@@ -1,177 +1,128 @@
-let form = document.querySelector('form');
-let Todos = document.getElementById('todos');
-let input = document.getElementById('input');
-let AllTodos = getTodos();
+document.addEventListener('DOMContentLoaded', () => {
+    const taskInput = document.getElementById('input');
+    const addButton = document.getElementById('add');
+    const todoList = document.getElementById('todos');
+    const clearAll = document.getElementById('clearAll');
 
-let sortable = Sortable.create(Todos, {
-    animation: 150,
-    onEnd: function(evt) {
-        const fromIndex = evt.oldIndex;
-        const toIndex = evt.newIndex;
-        
-        const [movedItem] = AllTodos.splice(fromIndex, 1);
-        AllTodos.splice(toIndex, 0, movedItem);
-        
-        const items = Todos.querySelectorAll('.todo-item');
-        items.forEach((item, index) => {
-            item.setAttribute('data-index', index);
-        });
-        
-        saveTodos();
-    }
-});
-
-function getTodos() {
-    const savedTodos = localStorage.getItem('todos');
-    return savedTodos ? JSON.parse(savedTodos) : [];
-}
-
-function updateTodos() {
-    Todos.innerHTML = '';
-    AllTodos.forEach((todo, todoIndex) => {
-        let todoItem = creatTodoItem(todo, todoIndex);
-        Todos.appendChild(todoItem);
-    });
-}
-
-function creatTodoItem(todo, todoIndex) {
-    var paragraph = document.createElement('p');
-    paragraph.classList.add('todo-item');
-    paragraph.innerText = todo.text;
-    paragraph.setAttribute('data-index', todoIndex);
-    
-    if (todo.completed) {
-        paragraph.classList.add('completed');
+    function saveTasks() {
+        const tasks = [...todoList.children].map(li => ({
+            text: li.querySelector('.task-text').textContent,
+            completed: li.classList.contains('completed')
+        }));
+        localStorage.setItem('cosmic-todos', JSON.stringify(tasks));
     }
 
-    paragraph.addEventListener('click', function(e) {
-        const currentIndex = parseInt(this.getAttribute('data-index'));
-        paragraph.classList.toggle('completed');
-        toggleComplete(currentIndex);
-    });
-
-    let pressTimer;
-    let longPressDuration = 500;
-
-    paragraph.addEventListener('touchstart', function(e) {
-        pressTimer = setTimeout(() => {
-            const currentIndex = parseInt(this.getAttribute('data-index'));
-            AllTodos.splice(currentIndex, 1);
-            saveTodos();
-            updateTodos();
-        }, longPressDuration);
-    });
-
-    paragraph.addEventListener('touchend', function(e) {
-        clearTimeout(pressTimer);
-    });
-    paragraph.addEventListener('touchmove', function(e) {
-        clearTimeout(pressTimer);
-    });
-    paragraph.addEventListener('dblclick', function(e) {
-        const currentIndex = parseInt(this.getAttribute('data-index'));
-        AllTodos.splice(currentIndex, 1);
-        saveTodos();
-        updateTodos();
-    });
-
-    return paragraph;
-}
-
-function addTodo() {
-    let todoText = input.value.trim();
-    if(todoText.length > 0 && todoText.length <= 100) {
-        let todoObject = {
-            text: todoText,
-            completed: false
-        };
-        AllTodos.push(todoObject);
-        updateTodos();
-        saveTodos();
-        input.value = '';
-    }
-}
-
-function toggleComplete(index) {
-    AllTodos[index].completed = !AllTodos[index].completed;
-    saveTodos();
-}
-
-function saveTodos() {
-    localStorage.setItem('todos', JSON.stringify(AllTodos));
-}
-
-form.addEventListener('submit', function(e) {
-    e.preventDefault();
-    addTodo();
-});
-
-updateTodos();
-
-// Mobile optimization code
-(function initMobileOptimizations() {
-    // Remove the touchend event listener that prevents form submission
-    // This was causing issues with form submission on mobile devices
-    // form.addEventListener('touchend', (e) => {
-    //     e.preventDefault();
-    // });
-
-    // Data validation and cleanup on page load
-    function validateAndCleanData() {
-        try {
-            const savedTodos = localStorage.getItem('todos');
-            if (!savedTodos) {
-                localStorage.setItem('todos', JSON.stringify([]));
-                return;
-            }
-
-            const todos = JSON.parse(savedTodos);
-            if (!Array.isArray(todos)) {
-                localStorage.setItem('todos', JSON.stringify([]));
-                return;
-            }
-
-            // Clean and re-save to ensure data integrity
-            const cleanTodos = todos.filter(todo => 
-                todo && 
-                typeof todo === 'object' && 
-                'text' in todo && 
-                'completed' in todo
-            );
-            
-            localStorage.setItem('todos', JSON.stringify(cleanTodos));
-            AllTodos = cleanTodos;
-            updateTodos();
-        } catch {
-            localStorage.setItem('todos', JSON.stringify([]));
-            AllTodos = [];
-            updateTodos();
+    function loadTasks() {
+        const saved = JSON.parse(localStorage.getItem('cosmic-todos'));
+        if (saved) {
+            saved.forEach(task => addTask(task.text, task.completed));
+        } else {
+            addTask('Welcome to your Todo App! 🚀');
+            addTask('How to use?  Click on the "❓" for a quick guide!');
         }
     }
 
-    // Run validation on page load
-    validateAndCleanData();
+    function updateStats() {
+        const total = todoList.children.length;
+        const completed = document.querySelectorAll('.completed').length;
+        document.getElementById('totalTasks').textContent = total;
+        document.getElementById('completedTasks').textContent = completed;
+        saveTasks();
+    }
 
-    // Improve long press detection for deleting tasks
-    document.querySelectorAll('.todo-item').forEach(item => {
-        let pressTimer;
-        let longPressDuration = 500;
+    function sanitize(input) {
+        const div = document.createElement('div');
+        div.textContent = input;
+        return div.innerHTML;
+    }
 
-        item.addEventListener('touchstart', function(e) {
-            pressTimer = setTimeout(() => {
-                const currentIndex = parseInt(this.getAttribute('data-index'));
-                AllTodos.splice(currentIndex, 1);
-                saveTodos();
-                updateTodos();
-            }, longPressDuration);
+    // Add task function
+    function addTask(taskText, completed = false) {
+        const li = document.createElement('li');
+        li.className = 'todo-item';
+        const safeText = sanitize(taskText);
+        
+        li.innerHTML = `
+            <label class="checkbox-container">
+                <input 
+                    type="checkbox" 
+                    aria-label="Mark task as complete"
+                    ${completed ? 'checked' : ''}
+                >
+                <span class="checkmark" role="presentation"></span>
+            </label>
+            <span class="task-text">${safeText}</span>
+            <button class="delete-btn"><i class="fas fa-trash"></i></button>
+        `;
+
+        const checkbox = li.querySelector('input');
+        checkbox.addEventListener('change', function() {
+            li.classList.toggle('completed', this.checked);
+            updateStats(); 
         });
 
-        item.addEventListener('touchend', function(e) {
-            clearTimeout(pressTimer);
+        li.querySelector('.delete-btn').addEventListener('click', () => {
+            li.style.transform = 'translateX(100%)';
+            li.style.opacity = '0';
+            setTimeout(() => {
+                li.remove();
+                updateStats(); 
+            }, 300);
         });
 
-        item.addEventListener('touchmove', function(e) {
-            clearTimeout(pressTimer);
-        });
+        todoList.appendChild(li);
+        updateStats();
+    }
+
+    addButton.addEventListener('click', () => {
+        const taskText = taskInput.value.trim();
+        if (!taskText) {
+            taskInput.classList.add('shake');
+            setTimeout(() => taskInput.classList.remove('shake'), 400);
+            return;
+        }
+        addTask(taskText);
+        taskInput.value = '';
     });
-})();
+
+    taskInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') addButton.click();
+    });
+
+    clearAll.addEventListener('click', () => {
+        if (confirm('Are you sure you want to clear all tasks?')) {
+            todoList.querySelectorAll('li').forEach(li => {
+                li.style.transform = 'translateX(-100%)';
+                li.style.opacity = '0';
+            });
+            setTimeout(() => {
+                todoList.innerHTML = '';
+                updateStats();
+                saveTasks();
+            }, 300);
+        }
+    });
+
+    loadTasks();
+
+    const sortable = Sortable.create(todoList, {
+        animation: 150,
+        ghostClass: 'dragging',
+        dragClass: 'dragging',
+        onStart: function(evt) {
+            requestAnimationFrame(() => {
+                evt.item.classList.add('dragging');
+            });
+        },
+        onEnd: function(evt) {
+            evt.item.classList.remove('dragging');
+            const fromIndex = evt.oldIndex;
+            const toIndex = evt.newIndex;
+            
+            const [movedItem] = Array.from(todoList.children).splice(fromIndex, 1);
+            todoList.insertBefore(movedItem, todoList.children[toIndex]);
+            
+            saveTasks();
+        }
+    });
+});

@@ -2,9 +2,11 @@
     --background: #101114;
     --primary: #1C1D20;
     --secondary: #4A4D57;
+    --space: #1a1832;
     --accent-color: #7600c1;
     --secondary-accent: #b52fdd;
     --text-color: #f9f9f9;
+    --gradient: linear-gradient(135deg, var(--accent-color), var(--secondary-accent));
 }
 * {
     margin: 0;
@@ -26,8 +28,7 @@ body {
     padding: 20px;
 }
 h1 {
-    margin-top: 100px;
-    margin-bottom: 20px;
+    margin: 2.2rem 0 1rem 0;
     font-size: 3rem;
     font-weight: 800;
     text-transform: uppercase;
@@ -43,8 +44,8 @@ h1 {
     position: fixed;
     top: 20px;
     right: 20px;
-    width: 40px;
-    height: 40px;
+    width: 1.7rem;
+    height: 1.7rem;
     border-radius: 50%;
     background-color: var(--secondary-accent);
     border: none;
@@ -59,15 +60,19 @@ h1 {
 }
 #help-button:hover {
     background-color: var(--accent-color);
+    box-shadow: 0 0 16px rgba(168, 164, 255, 0.3);
+
 }
 .help-card {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: var(--primary);
-    padding: 15px;
+    background-color: var(--space);
+    padding: 0.4rem 2rem;
+    margin: 0.7rem auto;
     border-radius: 15px;
+    border: 2px solid var(--secondary-accent);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     max-width: 400px;
     width: 90%;
@@ -75,19 +80,20 @@ h1 {
     z-index: 1000;
 }
 .help-card h2 {
-    margin-bottom: 15px;
+    margin-bottom: 1rem;
     color: var(--accent-color);
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     font-weight: 800;
     text-transform: uppercase;
     text-align: center;
 }
-.help-card ul {
+.help-card ol {
     list-style-type: disc;
-    padding-left: 20px;
+    padding-left: 1,5rem;
 }
-.help-card ul li {
-    margin-bottom: 10px;
+.help-card ol li {
+    margin-bottom: 0.5rem;
+    padding-left: 0.5rem;
 }
 #close-help {
     background-color: var(--secondary-accent);
@@ -105,13 +111,15 @@ h1 {
 #close-help:hover {
     background-color: var(--accent-color);
 }
-form {
+.input-section {
     position: relative;
-    margin-bottom: 20px;
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
 }
 #input {
-    box-sizing: border-box;
-    padding: 12px 20px;
+    flex: 1;
+    padding: 0.75rem 1rem;
     width: 100%;
     background: none;
     border: 2px solid var(--secondary);
@@ -126,8 +134,17 @@ form {
 #input:hover, #input:focus {
     outline: none;
     border-color: var(--secondary-accent);
-    box-shadow: 0 0 0 2px rgba(118, 0, 193, 0.2);
+    box-shadow: 0 0 16px rgba(168, 164, 255, 0.3);
 }
+.stats {
+    text-align: center;
+    margin: 1rem 0;
+    color: var(--secondary);
+    font-size: 0.7rem;
+}
+.stats span {
+    font-size: 0.7rem;
+}    
 .todos {
     padding: 0;
     border-radius: 15px;
@@ -141,57 +158,199 @@ form {
     backface-visibility: hidden;
 }
 #add {
-    position: absolute;
-    top: 0;
-    right: 0;
-    background-color: var(--secondary-accent);
+    background: var(--gradient);
     height: 100%;
-    padding: 0 30px;
+    padding: 0.75rem 1rem;
     border: none;
     border-radius: 1000px;
     font: inherit;
-    font-weight: 600;
+    font-weight: bold;
     color: var(--background);
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.1s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
+    overflow: hidden;
 }
 #add:hover {
-    background-color: var(--accent-color);
+    box-shadow: 0 4px 24px rgba(108, 92, 231, 0.4);
+    transform: translateY(-2px);
 }
 #add:active {
     transform: scale(0.98);
 }
 .todo-item {
     cursor: grab;
-    box-sizing: border-box;
-    margin: 10px 0;
-    width: 100%;
-    padding: 12px 20px;
-    border-left: 8px solid var(--secondary-accent);
-    border-right: 8px solid var(--secondary-accent);
-    border-radius: 15px;
-}
-.sortable-ghost {
-    opacity: 0.2;
-}
-.sortable-drag {
-    cursor: grabbing;
-}
-.completed {
-    text-decoration: line-through var(--accent-color);
-    opacity: 0.7;
-    border-left: 8px solid var(--accent-color);
-    border-right: 8px solid var(--accent-color);
-    border-radius: 15px;
-    color: var(--secondary);
+    user-select: none;
+    display: flex;
+    align-items: center;
+    padding: 0.3rem;
+    background: none;
+    margin-bottom: 1rem;
+    border-radius: 1000px;
     transition: all 0.3s ease;
-    padding: 12px 20px;
+    position: relative;
+    opacity: 0;
+    transform: translateY(-10px);
+    animation: fadeIn 0.4s ease forwards;
 }
-.completed:hover {
-    opacity: 0.9;
-    border-left: 4px solid var(--secondary-accent);
-    border-right: 4px solid var(--secondary-accent);
-    color: var(--secondary-accent);
+.todo-item.dragging {
+    cursor: grabbing !important;
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.todo-item:hover {
+    transform: translateX(10px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+}
+
+.todo-item.completed {
+    opacity: 0.8;
+}
+
+.todo-item.completed .task-text {
+    text-decoration: line-through;
+    color: var(--secondary);
+}
+
+.task-text {
+    flex: 1;
+    margin: 0 0.7rem;
+    font-size: 1rem;
+    position: relative;
+}
+
+.delete-btn {
+    padding: 0.5rem 1rem;
+    background: #ED0800;
+    border: none;
+    border-radius: 1000px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+.delete-btn i {
+    font-size: 0.9rem;
+    color: var(--background);
+}
+.delete-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg,
+        transparent,
+        rgba(255,255,255,0.2),
+        transparent);
+    transition: 0.3s;
+}
+
+.delete-btn:hover {
+    background: #BE0600;
+    transform: scale(1.05);
+}
+
+.delete-btn:hover::before {
+    left: 100%;
+}
+/* Custom Checkbox */
+.checkbox-container {
+    display: block;
+    position: relative;
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+}
+
+.checkbox-container input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 24px;
+    width: 24px;
+    background-color: var(--space);
+    border: 2px solid var(--accent-color);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.checkbox-container input:checked ~ .checkmark {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+    left: 6px;
+    top: 2px;
+    width: 6px;
+    height: 12px;
+    border: solid var(--background);
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
+    transition: 0.2s ease;
+}
+
+.checkbox-container input:checked ~ .checkmark:after {
+    display: block;
+    animation: check 0.2s ease;
+}
+
+@keyframes check {
+    from { transform: scale(0) rotate(45deg); }
+    to { transform: scale(1) rotate(45deg); }
+}
+/* Clear All Button */
+#clearAll {
+    position: block;
+    width: 1.7rem;
+    height: 1.7rem;
+    border-radius: 1000px;
+    margin: 1rem auto;
+    padding: 0.8rem 2rem;
+    background: #ED0800;
+    color: var(--background);
+    font-size: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: bold;
+}
+
+#clearAll:hover {
+    background: #BE0600;
+    transform: scale(1.05);
+    box-shadow: 0 4px 16px rgba(255,75,87,0.3);
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+.shake {
+    animation: shake 0.4s ease;
+    border-color: #FF4757 !important;
 }
 @media (max-width: 500px) {
     * {
@@ -203,10 +362,13 @@ form {
     .container {
         padding: 0 10px;
     }
+    .input-section {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
     #add {
-        position: unset;
         width: 100%;
-        margin-top: 10px;
+        margin-top: 0.5rem;
         padding: 15px;
         height: auto;
     }
